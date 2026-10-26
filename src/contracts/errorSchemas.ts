@@ -56,6 +56,19 @@ export const analysisErrorProjectionSchema = z.discriminatedUnion("code", [
           declared_sha256: z.string().nullable(),
           calculated_sha256: z.string().nullable(),
           unpacked: z.boolean(),
+          signing_explanation: z
+            .strictObject({
+              kind: z.literal("signed-after-packing"),
+              platform: z.literal("pe-authenticode"),
+              unsigned_sha256: z.string().regex(/^[a-f0-9]{64}$/u),
+              certificate_table_bytes: z
+                .number()
+                .int()
+                .nonnegative()
+                .max(Number.MAX_SAFE_INTEGER),
+              signer_subjects: z.array(z.string()),
+            })
+            .optional(),
         }),
         z.strictObject({
           logical_path: z.string(),

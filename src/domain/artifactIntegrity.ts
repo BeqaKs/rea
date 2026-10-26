@@ -50,9 +50,26 @@ export const artifactIntegrityPairOf = (
         observed_md5: pair.observed_md5,
       };
 
+/**
+ * Verifiable explanation when stripping Authenticode restores an ASAR-declared
+ * SHA-256. Observed companion bytes remain untrusted; this does not attest the
+ * signature or treat the entry as matching for equivalence.
+ */
+export const signedAfterPackingExplanationSchema = z.strictObject({
+  kind: z.literal("signed-after-packing"),
+  platform: z.literal("pe-authenticode"),
+  unsigned_sha256: sha256,
+  certificate_table_bytes: z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER),
+  signer_subjects: z.array(z.string()),
+});
+export type SignedAfterPackingExplanation = z.infer<
+  typeof signedAfterPackingExplanationSchema
+>;
+
 export type ArtifactIntegrityDetails = {
   readonly logicalPath: string;
   readonly unpacked: boolean;
+  readonly signingExplanation?: SignedAfterPackingExplanation;
 } & (
   | {
       readonly declaredSha256: string | null;
@@ -71,9 +88,15 @@ export const artifactIntegrityDetails = (
   claim: ArtifactIntegrityClaim | null,
   observed: string | null,
   unpacked: boolean,
+  options: {
+    readonly signingExplanation?: SignedAfterPackingExplanation;
+  } = {},
 ): ArtifactIntegrityDetails => ({
   logicalPath,
   unpacked,
+  ...(options.signingExplanation === undefined
+    ? {}
+    : { signingExplanation: options.signingExplanation }),
   ...(claim?.algorithm === "md5"
     ? {
         algorithm: "md5" as const,
@@ -98,4 +121,7 @@ export const projectArtifactIntegrityDetails = (
         calculated_md5: details.calculatedMd5,
       }),
   unpacked: details.unpacked,
+  ...(details.signingExplanation === undefined
+    ? {}
+    : { signing_explanation: details.signingExplanation }),
 });

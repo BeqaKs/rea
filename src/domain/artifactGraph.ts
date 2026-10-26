@@ -2,6 +2,7 @@ import {
   artifactIntegrityClaimSchema,
   artifactSha256PairSchema,
   artifactMd5PairSchema,
+  signedAfterPackingExplanationSchema,
 } from "./artifactIntegrity.js";
 import { artifactFormatMetadataSchema } from "./artifactFormatMetadata.js";
 import { z } from "zod";
@@ -170,6 +171,8 @@ const integrityContradictionBaseSchema = z.object({
   unpacked: z.boolean(),
   trust: z.literal("observed-untrusted"),
   provenance: z.literal("container-integrity-metadata-versus-observed-bytes"),
+  /** Present when PE Authenticode stripping restores the declared SHA-256. */
+  signing_explanation: signedAfterPackingExplanationSchema.exactOptional(),
   limitations: z.array(z.string()).min(1),
 });
 
