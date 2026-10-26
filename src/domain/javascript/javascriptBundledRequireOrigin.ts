@@ -9,7 +9,6 @@ import {
   unwrapJavaScriptExpression,
 } from "./javascriptAstValues.js";
 import { collectJavaScriptIdentityWritesSteps } from "./javascriptElectronMemberWrites.js";
-import { semanticBindingAtRead } from "./javascriptSemanticMutationInitializers.js";
 import { SEMANTIC_ALIAS_SELECTION_LIMIT } from "./javascriptSemanticResourceLimits.js";
 import { createSemanticModuleInterop } from "./javascriptModuleInterop.js";
 import {
@@ -150,6 +149,55 @@ export const semanticBundledRequireOrigin = (
   return undefined;
 };
 
+/**
+ * Bindings that are the Webpack loader or an empty-projection alias of it.
+ *
+ * Expand from the loader set instead of walking every identity-write root
+ * toward the loader. On a large bootstrap, the outward walk from unrelated
+ * writes can hit SEMANTIC_ALIAS_SELECTION_LIMIT and formerly treated those
+ * writes as loader mutations, which withheld Electron identity.
+ */
+const loaderOwnedBindingIds = (
+  loaderBindingIds: ReadonlySet<string>,
+  state: JavaScriptSemanticAnalysisState,
+): ReadonlySet<string> | undefined => {
+  const aliasesFrom = new Map<string, string[]>();
+  for (const binding of state.bindingsById.values()) {
+    for (const source of [
+      ...binding.initializers,
+      ...binding.referenceInitializers,
+    ]) {
+      if (source.projection.length !== 0) continue;
+      const node = unwrapJavaScriptExpression(source.node).node;
+      if (!t.isIdentifier(node)) continue;
+      const origin = resolveSemanticBindingState(state, node, node.name);
+      if (origin === undefined) continue;
+      const aliases = aliasesFrom.get(origin.bindingId);
+      if (aliases === undefined)
+        aliasesFrom.set(origin.bindingId, [binding.bindingId]);
+      else aliases.push(binding.bindingId);
+    }
+  }
+  const owned = new Set(loaderBindingIds);
+  const pending = [...loaderBindingIds];
+  let expansions = 0;
+  while (pending.length > 0) {
+    const bindingId = pending.pop();
+    if (bindingId === undefined) continue;
+    for (const aliasId of aliasesFrom.get(bindingId) ?? []) {
+      expansions += 1;
+      if (expansions > SEMANTIC_ALIAS_SELECTION_LIMIT) {
+        state.valueResourceLimits.add("alias-selections");
+        return undefined;
+      }
+      if (owned.has(aliasId)) continue;
+      owned.add(aliasId);
+      pending.push(aliasId);
+    }
+  }
+  return owned;
+};
+
 /** Prove the source-local n.n getter and reject visible replacements. */
 const canonicalWebpackInteropBindings = (
   loaderBindingIds: ReadonlySet<string>,
@@ -159,34 +207,13 @@ const canonicalWebpackInteropBindings = (
   // The shared identity-write owner covers assignment, delete, destructuring,
   // and Object/Reflect mutators; any write that may select `n` counts.
   const writes = new Set<t.Node>();
+  const owned = loaderOwnedBindingIds(loaderBindingIds, state);
+  if (owned === undefined) return new Set();
   const loaderMayOwnReference = (root: t.Node): boolean => {
-    const pending = [root];
-    const seen = new Set<t.Node>();
-    while (pending.length > 0) {
-      const reference = pending.pop();
-      if (reference === undefined || seen.has(reference)) continue;
-      seen.add(reference);
-      if (seen.size > SEMANTIC_ALIAS_SELECTION_LIMIT) {
-        state.valueResourceLimits.add("alias-selections");
-        return true;
-      }
-      const node = unwrapJavaScriptExpression(reference).node;
-      if (!t.isIdentifier(node)) continue;
-      const binding = resolveSemanticBindingState(state, node, node.name);
-      if (binding === undefined) continue;
-      if (loaderBindingIds.has(binding.bindingId)) return true;
-      const selected = semanticBindingAtRead(
-        binding,
-        node,
-        state.parentsByNode,
-      ).binding;
-      for (const source of [
-        ...selected.initializers,
-        ...selected.referenceInitializers,
-      ])
-        if (source.projection.length === 0) pending.push(source.node);
-    }
-    return false;
+    const node = unwrapJavaScriptExpression(root).node;
+    if (!t.isIdentifier(node)) return false;
+    const binding = resolveSemanticBindingState(state, node, node.name);
+    return binding !== undefined && owned.has(binding.bindingId);
   };
   const interop = createSemanticModuleInterop(state);
   completeSemanticSteps(

@@ -181,6 +181,27 @@ describe("Electron identity through Webpack externals", () => {
   });
 });
 
+describe("Webpack interop alias ownership bounds", () => {
+  it("keeps Electron identity when many unrelated alias chains exceed the old per-write walk bound", () => {
+    // A long empty-projection alias chain ending at a plain object used to make
+    // loaderMayOwnReference hit SEMANTIC_ALIAS_SELECTION_LIMIT (512) and treat
+    // the write as a loader mutation, withholding BrowserWindow facts.
+    const chain: string[] = ["var o0={}"];
+    for (let index = 1; index <= 600; index += 1)
+      chain.push(`,o${String(index)}=o${String(index - 1)}`);
+    chain.push(`;o600.p=1;`);
+    const source = bootstrap(EXTERNAL, CONSUMER, `${chain.join("")}n(100);`);
+    const analysis = analyzeJavaScriptStaticSource(source);
+    expect(analysis.electron.browser_windows).toHaveLength(1);
+    expect(analysis.electron.ipc).toMatchObject([
+      { channel: "get-connections", side: "main" },
+    ]);
+    expect(
+      analysis.analysis_coverage?.examination.semantic_resource_limits ?? [],
+    ).not.toContain("alias-selections");
+  });
+});
+
 describe("Webpack externals with a tampered runtime", () => {
   it.each([
     [
