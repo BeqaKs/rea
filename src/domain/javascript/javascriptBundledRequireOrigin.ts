@@ -10,6 +10,7 @@ import {
 } from "./javascriptAstValues.js";
 import { collectJavaScriptIdentityWritesSteps } from "./javascriptElectronMemberWrites.js";
 import { SEMANTIC_ALIAS_SELECTION_LIMIT } from "./javascriptSemanticResourceLimits.js";
+import { semanticBindingAtRead } from "./javascriptSemanticMutationInitializers.js";
 import { createSemanticModuleInterop } from "./javascriptModuleInterop.js";
 import {
   semanticRequireOrigin,
@@ -152,15 +153,16 @@ export const semanticBundledRequireOrigin = (
 /**
  * Bindings that are the Webpack loader or an empty-projection alias of it.
  *
- * Expand from the loader set instead of walking every identity-write root
- * toward the loader. On a large bootstrap, the outward walk from unrelated
- * writes can hit SEMANTIC_ALIAS_SELECTION_LIMIT and formerly treated those
- * writes as loader mutations, which withheld Electron identity.
+ * Expand from the loader set so write checks can skip unrelated roots without
+ * walking their alias chains. Ownership is a candidate filter only: a binding
+ * that was once an alias may be reassigned, so write sites still select the
+ * value at read time. Expansion is bounded by binding count; shallow unused
+ * aliases must not invalidate the getter proof.
  */
 const loaderOwnedBindingIds = (
   loaderBindingIds: ReadonlySet<string>,
   state: JavaScriptSemanticAnalysisState,
-): ReadonlySet<string> | undefined => {
+): ReadonlySet<string> => {
   const aliasesFrom = new Map<string, string[]>();
   for (const binding of state.bindingsById.values()) {
     for (const source of [
@@ -180,16 +182,10 @@ const loaderOwnedBindingIds = (
   }
   const owned = new Set(loaderBindingIds);
   const pending = [...loaderBindingIds];
-  let expansions = 0;
   while (pending.length > 0) {
     const bindingId = pending.pop();
     if (bindingId === undefined) continue;
     for (const aliasId of aliasesFrom.get(bindingId) ?? []) {
-      expansions += 1;
-      if (expansions > SEMANTIC_ALIAS_SELECTION_LIMIT) {
-        state.valueResourceLimits.add("alias-selections");
-        return undefined;
-      }
       if (owned.has(aliasId)) continue;
       owned.add(aliasId);
       pending.push(aliasId);
@@ -208,12 +204,36 @@ const canonicalWebpackInteropBindings = (
   // and Object/Reflect mutators; any write that may select `n` counts.
   const writes = new Set<t.Node>();
   const owned = loaderOwnedBindingIds(loaderBindingIds, state);
-  if (owned === undefined) return new Set();
   const loaderMayOwnReference = (root: t.Node): boolean => {
-    const node = unwrapJavaScriptExpression(root).node;
-    if (!t.isIdentifier(node)) return false;
-    const binding = resolveSemanticBindingState(state, node, node.name);
-    return binding !== undefined && owned.has(binding.bindingId);
+    // Owned bindings narrow candidates; read-time selection decides whether
+    // the write still sees the loader after a reassignment.
+    const pending = [root];
+    const seen = new Set<t.Node>();
+    while (pending.length > 0) {
+      const reference = pending.pop();
+      if (reference === undefined || seen.has(reference)) continue;
+      seen.add(reference);
+      if (seen.size > SEMANTIC_ALIAS_SELECTION_LIMIT) {
+        state.valueResourceLimits.add("alias-selections");
+        return true;
+      }
+      const node = unwrapJavaScriptExpression(reference).node;
+      if (!t.isIdentifier(node)) continue;
+      const binding = resolveSemanticBindingState(state, node, node.name);
+      if (binding === undefined || !owned.has(binding.bindingId)) continue;
+      if (loaderBindingIds.has(binding.bindingId)) return true;
+      const selected = semanticBindingAtRead(
+        binding,
+        node,
+        state.parentsByNode,
+      ).binding;
+      for (const source of [
+        ...selected.initializers,
+        ...selected.referenceInitializers,
+      ])
+        if (source.projection.length === 0) pending.push(source.node);
+    }
+    return false;
   };
   const interop = createSemanticModuleInterop(state);
   completeSemanticSteps(
