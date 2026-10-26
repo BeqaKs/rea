@@ -1651,7 +1651,13 @@ without asking npm to resolve the workspace's dependency graph.
 
 ### Global installation wrapper
 
-The optional curl wrapper installs only the global npm package:
+The optional curl wrapper installs only the global npm package. The script itself
+fetches release metadata over HTTPS, never invokes `sudo`, prints the install
+plan before writing, and checks that the installed CLI version matches the
+selected package version.
+
+Piping the `main`-branch script into bash runs whatever that branch holds at
+fetch time. The downloaded script is not signed:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/morluto/rea/main/install.sh | bash
@@ -1666,11 +1672,11 @@ curl -fsSL https://raw.githubusercontent.com/morluto/rea/main/install.sh |
   bash -s -- --dry-run
 ```
 
-To review a version-pinned installer before running it, select the release
-version, download its tagged script, and inspect the downloaded file:
+For a reviewable, version-pinned path, download `install.sh` from a release tag
+(`rea-agents-<version>`), read it, then run it with `--version <version>`:
 
 ```bash
-rea_version=6.7.0
+rea_version=6.8.0
 curl -fsSL "https://raw.githubusercontent.com/morluto/rea/rea-agents-${rea_version}/install.sh" -o rea-install.sh
 less rea-install.sh
 ```
@@ -1682,7 +1688,9 @@ bash rea-install.sh --version "$rea_version"
 ```
 
 The tag pins the selected script revision; `--version` selects the npm package
-version. Neither command verifies a signature on the downloaded script.
+version. Neither the `main` curl path nor the tagged download verifies a
+signature on the script. Prefer an exact package version over `@latest` when
+you want the same pin for `npx`/`bunx` setup.
 
 Supported options are `--version <semver>`, `--dry-run`, `--no-setup`, `--no-prompt`, and `--verbose`. Neither `--no-prompt` nor a non-interactive shell grants permission to install external dependencies.
 
