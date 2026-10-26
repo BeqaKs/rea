@@ -15765,10 +15765,10 @@ msgid ""
 "every publish; use it when you intentionally want the newest release. For a "
 "version-pinned one-off CLI command, use {ph1} followed by the command."
 msgstr ""
-"Review the changes and restart your agent. Its REA connection pins a package"
-" version, so refreshing setup makes it use the new release. {ph0} follows "
-"every publish; use it when you intentionally want the newest release. For a "
-"version-pinned one-off CLI command, use {ph1} followed by the command."
+"Xem lại thay đổi và khởi động lại agent. Kết nối REA của nó ghim một "
+"phiên bản gói, nên chạy lại setup mới khiến nó dùng bản phát hành mới. "
+"{ph0} theo mọi lần phát hành; chỉ dùng khi bạn cố ý muốn bản mới nhất. "
+"Với lệnh CLI một lần đã ghim phiên bản, dùng {ph1} rồi đến lệnh."
 
 #. {ph0}: <code>@6.8.0</code>
 #. {ph1}: <code>@latest</code>
@@ -15779,8 +15779,8 @@ msgid ""
 "Prefer a version pin such as {ph0}. Use {ph1} only when you intentionally "
 "want every new publish."
 msgstr ""
-"Prefer a version pin such as {ph0}. Use {ph1} only when you intentionally "
-"want every new publish."
+"Nên ghim phiên bản như {ph0}. Chỉ dùng {ph1} khi bạn cố ý muốn theo mọi "
+"bản phát hành mới."
 
 #: website/public/get-started/index.html:1665
 msgctxt "page:get-started/index.html"
@@ -15789,9 +15789,9 @@ msgid ""
 " preparing Node.js. Download the tagged script, inspect it, then install "
 "that package version:"
 msgstr ""
-"On macOS or Linux, you can also review a version-pinned curl installer after"
-" preparing Node.js. Download the tagged script, inspect it, then install "
-"that package version:"
+"Trên macOS hoặc Linux, sau khi chuẩn bị Node.js, bạn cũng có thể xem lại "
+"trình cài đặt curl đã ghim phiên bản. Tải script theo thẻ, kiểm tra, rồi "
+"cài phiên bản gói đó:"
 
 #. {ph0}: <code>--version</code>
 #. {ph1}: <code>main/install.sh</code>
@@ -15806,10 +15806,10 @@ msgid ""
 " opt-in. Follow the setup prompts to connect your agent. If they don't "
 "appear, run {ph3}."
 msgstr ""
-"The tag pins the selected script revision; {ph0} selects the npm package. "
-"Piping {ph1} or using {ph2} follows every new tip publish; treat those as an"
-" opt-in. Follow the setup prompts to connect your agent. If they don't "
-"appear, run {ph3}."
+"Thẻ ghim bản sửa đổi script đã chọn; {ph0} chọn gói npm. Đưa {ph1} qua "
+"ống dẫn hoặc dùng {ph2} sẽ theo mọi bản tip mới; hãy coi đó là tùy chọn. "
+"Làm theo hướng dẫn thiết lập để kết nối agent. Nếu không hiện, chạy "
+"{ph3}."
 
 #. {ph0}: <code>@latest</code>
 #: website/public/get-started/index.html:1767
@@ -15820,9 +15820,9 @@ msgid ""
 "review its plan and restart your client. {ph0} follows every publish; use it"
 " when you intentionally want the newest release."
 msgstr ""
-"To refresh your agent connection, run setup again for the release you want, "
-"review its plan and restart your client. {ph0} follows every publish; use it"
-" when you intentionally want the newest release."
+"Để làm mới kết nối agent, chạy lại setup cho bản phát hành bạn muốn, xem "
+"kế hoạch rồi khởi động lại client. {ph0} theo mọi lần phát hành; chỉ "
+"dùng khi bạn cố ý muốn bản mới nhất."
 
 #. {ph0}: <code>@6.8.0</code>
 #. {ph1}: <code>@latest</code>
@@ -15833,8 +15833,8 @@ msgid ""
 "Approve the setup plan, then restart your agent. Prefer a version pin such "
 "as {ph0}; use {ph1} only when you want every new publish."
 msgstr ""
-"Approve the setup plan, then restart your agent. Prefer a version pin such "
-"as {ph0}; use {ph1} only when you want every new publish."
+"Phê duyệt kế hoạch thiết lập, rồi khởi động lại agent. Nên ghim phiên "
+"bản như {ph0}; chỉ dùng {ph1} khi muốn theo mọi bản phát hành mới."
 
 # Reviewed for readable setup and analysis terminology.
 #, python-brace-format

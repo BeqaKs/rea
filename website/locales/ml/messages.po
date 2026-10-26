@@ -13907,10 +13907,12 @@ msgid ""
 "every publish; use it when you intentionally want the newest release. For a "
 "version-pinned one-off CLI command, use {ph1} followed by the command."
 msgstr ""
-"Review the changes and restart your agent. Its REA connection pins a package"
-" version, so refreshing setup makes it use the new release. {ph0} follows "
-"every publish; use it when you intentionally want the newest release. For a "
-"version-pinned one-off CLI command, use {ph1} followed by the command."
+"മാറ്റങ്ങൾ അവലോകനം ചെയ്ത് ഏജന്റ് റീസ്റ്റാർട്ട് ചെയ്യുക. അതിന്റെ REA "
+"കണക്ഷൻ പാക്കേജ് പതിപ്പ് പിൻ ചെയ്യുന്നതിനാൽ setup വീണ്ടും "
+"പ്രവർത്തിപ്പിച്ചാൽ പുതിയ റിലീസ് ഉപയോഗിക്കും. {ph0} ഓരോ പ്രസിദ്ധീകരണവും "
+"പിന്തുടരുന്നു; ഏറ്റവും പുതിയ റിലീസ് ബോധപൂർവം വേണമെങ്കിൽ മാത്രം "
+"ഉപയോഗിക്കുക. പതിപ്പ് പിൻ ചെയ്ത ഒറ്റത്തവണ CLI കമാൻഡിന് {ph1}-ന് ശേഷം "
+"കമാൻഡ് ചേർക്കുക."
 
 #. {ph0}: <code>@6.8.0</code>
 #. {ph1}: <code>@latest</code>
@@ -13921,8 +13923,8 @@ msgid ""
 "Prefer a version pin such as {ph0}. Use {ph1} only when you intentionally "
 "want every new publish."
 msgstr ""
-"Prefer a version pin such as {ph0}. Use {ph1} only when you intentionally "
-"want every new publish."
+"{ph0} പോലുള്ള പതിപ്പ് പിൻ ചെയ്യൽ മുൻഗണന നൽകുക. ഓരോ പുതിയ പ്രസിദ്ധീകരണവും "
+"ബോധപൂർവം പിന്തുടരാൻ ആഗ്രഹിക്കുമ്പോൾ മാത്രം {ph1} ഉപയോഗിക്കുക."
 
 #: website/public/get-started/index.html:1665
 msgctxt "page:get-started/index.html"
@@ -13931,9 +13933,9 @@ msgid ""
 " preparing Node.js. Download the tagged script, inspect it, then install "
 "that package version:"
 msgstr ""
-"On macOS or Linux, you can also review a version-pinned curl installer after"
-" preparing Node.js. Download the tagged script, inspect it, then install "
-"that package version:"
+"macOS അല്ലെങ്കിൽ Linux-ൽ Node.js തയ്യാറാക്കിയ ശേഷം പതിപ്പ് പിൻ ചെയ്ത "
+"curl ഇൻസ്റ്റാളറും അവലോകനം ചെയ്യാം. ടാഗ് ചെയ്ത സ്ക്രിപ്റ്റ് ഡൗൺലോഡ് "
+"ചെയ്ത് പരിശോധിച്ച് ആ പാക്കേജ് പതിപ്പ് ഇൻസ്റ്റാൾ ചെയ്യുക:"
 
 #. {ph0}: <code>--version</code>
 #. {ph1}: <code>main/install.sh</code>
@@ -13948,10 +13950,11 @@ msgid ""
 " opt-in. Follow the setup prompts to connect your agent. If they don't "
 "appear, run {ph3}."
 msgstr ""
-"The tag pins the selected script revision; {ph0} selects the npm package. "
-"Piping {ph1} or using {ph2} follows every new tip publish; treat those as an"
-" opt-in. Follow the setup prompts to connect your agent. If they don't "
-"appear, run {ph3}."
+"ടാഗ് തിരഞ്ഞെടുത്ത സ്ക്രിപ്റ്റ് റിവിഷൻ പിൻ ചെയ്യുന്നു; {ph0} npm പാക്കേജ് "
+"തിരഞ്ഞെടുക്കുന്നു. {ph1} പൈപ്പ് ചെയ്യുകയോ {ph2} ഉപയോഗിക്കുകയോ ചെയ്താൽ "
+"ഓരോ പുതിയ tip പ്രസിദ്ധീകരണവും പിന്തുടരും; ഇത് ഐച്ഛികമായി കണക്കാക്കുക. "
+"ഏജന്റ് ബന്ധിപ്പിക്കാൻ സജ്ജീകരണ നിർദ്ദേശങ്ങൾ പിന്തുടരുക. അവ "
+"ദൃശ്യമാകുന്നില്ലെങ്കിൽ {ph3} പ്രവർത്തിപ്പിക്കുക."
 
 #. {ph0}: <code>@latest</code>
 #: website/public/get-started/index.html:1767
@@ -13962,9 +13965,10 @@ msgid ""
 "review its plan and restart your client. {ph0} follows every publish; use it"
 " when you intentionally want the newest release."
 msgstr ""
-"To refresh your agent connection, run setup again for the release you want, "
-"review its plan and restart your client. {ph0} follows every publish; use it"
-" when you intentionally want the newest release."
+"ഏജന്റ് കണക്ഷൻ പുതുക്കാൻ ആവശ്യമുള്ള റിലീസിന് setup വീണ്ടും "
+"പ്രവർത്തിപ്പിച്ച് പദ്ധതി അവലോകനം ചെയ്ത് ക്ലയന്റ് റീസ്റ്റാർട്ട് ചെയ്യുക. "
+"{ph0} ഓരോ പ്രസിദ്ധീകരണവും പിന്തുടരുന്നു; ഏറ്റവും പുതിയ റിലീസ് ബോധപൂർവം "
+"വേണമെങ്കിൽ മാത്രം ഉപയോഗിക്കുക."
 
 #. {ph0}: <code>@6.8.0</code>
 #. {ph1}: <code>@latest</code>
@@ -13975,8 +13979,9 @@ msgid ""
 "Approve the setup plan, then restart your agent. Prefer a version pin such "
 "as {ph0}; use {ph1} only when you want every new publish."
 msgstr ""
-"Approve the setup plan, then restart your agent. Prefer a version pin such "
-"as {ph0}; use {ph1} only when you want every new publish."
+"സജ്ജീകരണ പദ്ധതി അംഗീകരിച്ച ശേഷം ഏജന്റ് റീസ്റ്റാർട്ട് ചെയ്യുക. {ph0} "
+"പോലുള്ള പതിപ്പ് പിൻ ചെയ്യൽ മുൻഗണന നൽകുക; ഓരോ പുതിയ പ്രസിദ്ധീകരണവും "
+"പിന്തുടരാൻ ആഗ്രഹിക്കുമ്പോൾ മാത്രം {ph1} ഉപയോഗിക്കുക."
 
 #, python-brace-format
 #~ msgctxt "page:faq/index.html"

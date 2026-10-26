@@ -15522,10 +15522,10 @@ msgid ""
 "every publish; use it when you intentionally want the newest release. For a "
 "version-pinned one-off CLI command, use {ph1} followed by the command."
 msgstr ""
-"Review the changes and restart your agent. Its REA connection pins a package"
-" version, so refreshing setup makes it use the new release. {ph0} follows "
-"every publish; use it when you intentionally want the newest release. For a "
-"version-pinned one-off CLI command, use {ph1} followed by the command."
+"ตรวจการเปลี่ยนแปลงแล้วรีสตาร์ทเอเจนต์ การเชื่อมต่อ REA "
+"จะตรึงเวอร์ชันแพ็กเกจ ดังนั้นต้องรัน setup ใหม่จึงจะใช้รุ่นใหม่ {ph0} "
+"จะติดตามทุกการเผยแพร่ ใช้เมื่อตั้งใจต้องการรุ่นล่าสุดเท่านั้น "
+"สำหรับคำสั่ง CLI ครั้งเดียวที่ตรึงเวอร์ชัน ให้ใช้ {ph1} ตามด้วยคำสั่ง"
 
 #. {ph0}: <code>@6.8.0</code>
 #. {ph1}: <code>@latest</code>
@@ -15536,8 +15536,8 @@ msgid ""
 "Prefer a version pin such as {ph0}. Use {ph1} only when you intentionally "
 "want every new publish."
 msgstr ""
-"Prefer a version pin such as {ph0}. Use {ph1} only when you intentionally "
-"want every new publish."
+"ควรตรึงเวอร์ชันเช่น {ph0} ใช้ {ph1} "
+"เฉพาะเมื่อตั้งใจติดตามทุกการเผยแพร่ใหม่เท่านั้น"
 
 #: website/public/get-started/index.html:1665
 msgctxt "page:get-started/index.html"
@@ -15546,9 +15546,9 @@ msgid ""
 " preparing Node.js. Download the tagged script, inspect it, then install "
 "that package version:"
 msgstr ""
-"On macOS or Linux, you can also review a version-pinned curl installer after"
-" preparing Node.js. Download the tagged script, inspect it, then install "
-"that package version:"
+"บน macOS หรือ Linux หลังเตรียม Node.js แล้ว "
+"คุณยังสามารถตรวจสคริปต์ติดตั้ง curl ที่ตรึงเวอร์ชันได้ "
+"ดาวน์โหลดสคริปต์ตามแท็ก ตรวจสอบ แล้วติดตั้งเวอร์ชันแพ็กเกจนั้น:"
 
 #. {ph0}: <code>--version</code>
 #. {ph1}: <code>main/install.sh</code>
@@ -15563,10 +15563,9 @@ msgid ""
 " opt-in. Follow the setup prompts to connect your agent. If they don't "
 "appear, run {ph3}."
 msgstr ""
-"The tag pins the selected script revision; {ph0} selects the npm package. "
-"Piping {ph1} or using {ph2} follows every new tip publish; treat those as an"
-" opt-in. Follow the setup prompts to connect your agent. If they don't "
-"appear, run {ph3}."
+"แท็กจะตรึงรุ่นสคริปต์ที่เลือก; {ph0} เลือกแพ็กเกจ npm การส่งต่อ {ph1} "
+"ผ่านไปป์หรือใช้ {ph2} จะติดตามทุกการเผยแพร่ tip ใหม่ ให้ถือเป็นทางเลือก "
+"ทำตามคำแนะนำการตั้งค่าเพื่อเชื่อมเอเจนต์ หากไม่ปรากฏ ให้รัน {ph3}"
 
 #. {ph0}: <code>@latest</code>
 #: website/public/get-started/index.html:1767
@@ -15577,9 +15576,9 @@ msgid ""
 "review its plan and restart your client. {ph0} follows every publish; use it"
 " when you intentionally want the newest release."
 msgstr ""
-"To refresh your agent connection, run setup again for the release you want, "
-"review its plan and restart your client. {ph0} follows every publish; use it"
-" when you intentionally want the newest release."
+"หากต้องการรีเฟรชการเชื่อมต่อเอเจนต์ ให้รัน setup "
+"อีกครั้งสำหรับรุ่นที่ต้องการ ตรวจแผน แล้วรีสตาร์ทไคลเอนต์ {ph0} "
+"จะติดตามทุกการเผยแพร่ ใช้เมื่อตั้งใจต้องการรุ่นล่าสุดเท่านั้น"
 
 #. {ph0}: <code>@6.8.0</code>
 #. {ph1}: <code>@latest</code>
@@ -15590,8 +15589,8 @@ msgid ""
 "Approve the setup plan, then restart your agent. Prefer a version pin such "
 "as {ph0}; use {ph1} only when you want every new publish."
 msgstr ""
-"Approve the setup plan, then restart your agent. Prefer a version pin such "
-"as {ph0}; use {ph1} only when you want every new publish."
+"อนุมัติแผนการตั้งค่า แล้วรีสตาร์ทเอเจนต์ ควรตรึงเวอร์ชันเช่น {ph0}; ใช้ "
+"{ph1} เฉพาะเมื่อต้องการติดตามทุกการเผยแพร่ใหม่"
 
 # Reviewed for readable setup and analysis terminology.
 #, python-brace-format

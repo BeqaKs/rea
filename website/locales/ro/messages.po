@@ -13912,10 +13912,11 @@ msgid ""
 "every publish; use it when you intentionally want the newest release. For a "
 "version-pinned one-off CLI command, use {ph1} followed by the command."
 msgstr ""
-"Review the changes and restart your agent. Its REA connection pins a package"
-" version, so refreshing setup makes it use the new release. {ph0} follows "
-"every publish; use it when you intentionally want the newest release. For a "
-"version-pinned one-off CLI command, use {ph1} followed by the command."
+"Revizuiește modificările și repornește agentul. Conexiunea sa REA "
+"fixează o versiune de pachet, deci rularea din nou a setup-ului îl face "
+"să folosească noua versiune. {ph0} urmează fiecare publicare; "
+"folosește-l când vrei intenționat cea mai nouă versiune. Pentru o "
+"comandă CLI unică cu versiune fixată, folosește {ph1} urmat de comandă."
 
 #. {ph0}: <code>@6.8.0</code>
 #. {ph1}: <code>@latest</code>
@@ -13926,8 +13927,8 @@ msgid ""
 "Prefer a version pin such as {ph0}. Use {ph1} only when you intentionally "
 "want every new publish."
 msgstr ""
-"Prefer a version pin such as {ph0}. Use {ph1} only when you intentionally "
-"want every new publish."
+"Preferă o fixare de versiune precum {ph0}. Folosește {ph1} doar când "
+"vrei intenționat să urmezi fiecare publicare nouă."
 
 #: website/public/get-started/index.html:1665
 msgctxt "page:get-started/index.html"
@@ -13936,9 +13937,9 @@ msgid ""
 " preparing Node.js. Download the tagged script, inspect it, then install "
 "that package version:"
 msgstr ""
-"On macOS or Linux, you can also review a version-pinned curl installer after"
-" preparing Node.js. Download the tagged script, inspect it, then install "
-"that package version:"
+"Pe macOS sau Linux poți examina și un instalator curl cu versiune fixată "
+"după ce pregătești Node.js. Descarcă scriptul etichetat, inspectează-l, "
+"apoi instalează acea versiune de pachet:"
 
 #. {ph0}: <code>--version</code>
 #. {ph1}: <code>main/install.sh</code>
@@ -13953,10 +13954,10 @@ msgid ""
 " opt-in. Follow the setup prompts to connect your agent. If they don't "
 "appear, run {ph3}."
 msgstr ""
-"The tag pins the selected script revision; {ph0} selects the npm package. "
-"Piping {ph1} or using {ph2} follows every new tip publish; treat those as an"
-" opt-in. Follow the setup prompts to connect your agent. If they don't "
-"appear, run {ph3}."
+"Eticheta fixează revizia de script selectată; {ph0} selectează pachetul "
+"npm. Direcționarea {ph1} prin pipe sau folosirea {ph2} urmează fiecare "
+"publicare tip nouă; tratează asta ca opțiune. Urmează instrucțiunile de "
+"configurare pentru a-ți conecta agentul. Dacă nu apar, rulează {ph3}."
 
 #. {ph0}: <code>@latest</code>
 #: website/public/get-started/index.html:1767
@@ -13967,9 +13968,10 @@ msgid ""
 "review its plan and restart your client. {ph0} follows every publish; use it"
 " when you intentionally want the newest release."
 msgstr ""
-"To refresh your agent connection, run setup again for the release you want, "
-"review its plan and restart your client. {ph0} follows every publish; use it"
-" when you intentionally want the newest release."
+"Pentru a reîmprospăta conexiunea agentului, rulează din nou setup pentru "
+"versiunea dorită, revizuiește planul și repornește clientul. {ph0} "
+"urmează fiecare publicare; folosește-l când vrei intenționat cea mai "
+"nouă versiune."
 
 #. {ph0}: <code>@6.8.0</code>
 #. {ph1}: <code>@latest</code>
@@ -13980,8 +13982,9 @@ msgid ""
 "Approve the setup plan, then restart your agent. Prefer a version pin such "
 "as {ph0}; use {ph1} only when you want every new publish."
 msgstr ""
-"Approve the setup plan, then restart your agent. Prefer a version pin such "
-"as {ph0}; use {ph1} only when you want every new publish."
+"Aprobă planul de configurare, apoi repornește agentul. Preferă o fixare "
+"de versiune precum {ph0}; folosește {ph1} doar când vrei să urmezi "
+"fiecare publicare nouă."
 
 #, python-brace-format
 #~ msgctxt "page:faq/index.html"

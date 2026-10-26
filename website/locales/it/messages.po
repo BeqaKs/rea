@@ -15931,10 +15931,11 @@ msgid ""
 "every publish; use it when you intentionally want the newest release. For a "
 "version-pinned one-off CLI command, use {ph1} followed by the command."
 msgstr ""
-"Review the changes and restart your agent. Its REA connection pins a package"
-" version, so refreshing setup makes it use the new release. {ph0} follows "
-"every publish; use it when you intentionally want the newest release. For a "
-"version-pinned one-off CLI command, use {ph1} followed by the command."
+"Rivedi le modifiche e riavvia il tuo agente. La sua connessione a REA "
+"fissa una versione del pacchetto, quindi rieseguire il setup lo fa usare "
+"la nuova release. {ph0} segue ogni pubblicazione; usalo quando vuoi "
+"intenzionalmente la release più recente. Per un comando CLI una tantum "
+"con versione fissata, usa {ph1} seguito dal comando."
 
 #. {ph0}: <code>@6.8.0</code>
 #. {ph1}: <code>@latest</code>
@@ -15945,8 +15946,8 @@ msgid ""
 "Prefer a version pin such as {ph0}. Use {ph1} only when you intentionally "
 "want every new publish."
 msgstr ""
-"Prefer a version pin such as {ph0}. Use {ph1} only when you intentionally "
-"want every new publish."
+"Preferisci un pin di versione come {ph0}. Usa {ph1} solo quando vuoi "
+"seguire intenzionalmente ogni nuova pubblicazione."
 
 #: website/public/get-started/index.html:1665
 msgctxt "page:get-started/index.html"
@@ -15955,9 +15956,9 @@ msgid ""
 " preparing Node.js. Download the tagged script, inspect it, then install "
 "that package version:"
 msgstr ""
-"On macOS or Linux, you can also review a version-pinned curl installer after"
-" preparing Node.js. Download the tagged script, inspect it, then install "
-"that package version:"
+"Su macOS o Linux puoi anche esaminare un installer curl con versione "
+"fissata dopo aver preparato Node.js. Scarica lo script con tag, "
+"ispezionalo e poi installa quella versione del pacchetto:"
 
 #. {ph0}: <code>--version</code>
 #. {ph1}: <code>main/install.sh</code>
@@ -15972,10 +15973,11 @@ msgid ""
 " opt-in. Follow the setup prompts to connect your agent. If they don't "
 "appear, run {ph3}."
 msgstr ""
-"The tag pins the selected script revision; {ph0} selects the npm package. "
-"Piping {ph1} or using {ph2} follows every new tip publish; treat those as an"
-" opt-in. Follow the setup prompts to connect your agent. If they don't "
-"appear, run {ph3}."
+"Il tag fissa la revisione dello script selezionata; {ph0} seleziona il "
+"pacchetto npm. Inviare in pipe {ph1} o usare {ph2} segue ogni nuova "
+"pubblicazione tip; trattalo come un’opzione volontaria. Segui le "
+"indicazioni di setup per collegare il tuo agente. Se non compaiono, "
+"esegui {ph3}."
 
 #. {ph0}: <code>@latest</code>
 #: website/public/get-started/index.html:1767
@@ -15986,9 +15988,10 @@ msgid ""
 "review its plan and restart your client. {ph0} follows every publish; use it"
 " when you intentionally want the newest release."
 msgstr ""
-"To refresh your agent connection, run setup again for the release you want, "
-"review its plan and restart your client. {ph0} follows every publish; use it"
-" when you intentionally want the newest release."
+"Per aggiornare la connessione del tuo agente, esegui di nuovo il setup "
+"per la release desiderata, rivedi il piano e riavvia il client. {ph0} "
+"segue ogni pubblicazione; usalo quando vuoi intenzionalmente la release "
+"più recente."
 
 #. {ph0}: <code>@6.8.0</code>
 #. {ph1}: <code>@latest</code>
@@ -15999,8 +16002,9 @@ msgid ""
 "Approve the setup plan, then restart your agent. Prefer a version pin such "
 "as {ph0}; use {ph1} only when you want every new publish."
 msgstr ""
-"Approve the setup plan, then restart your agent. Prefer a version pin such "
-"as {ph0}; use {ph1} only when you want every new publish."
+"Approva il piano di setup, poi riavvia il tuo agente. Preferisci un pin "
+"di versione come {ph0}; usa {ph1} solo quando vuoi seguire ogni nuova "
+"pubblicazione."
 
 # Reviewed for readable setup and analysis terminology.
 #, python-brace-format

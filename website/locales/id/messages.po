@@ -15859,10 +15859,11 @@ msgid ""
 "every publish; use it when you intentionally want the newest release. For a "
 "version-pinned one-off CLI command, use {ph1} followed by the command."
 msgstr ""
-"Review the changes and restart your agent. Its REA connection pins a package"
-" version, so refreshing setup makes it use the new release. {ph0} follows "
-"every publish; use it when you intentionally want the newest release. For a "
-"version-pinned one-off CLI command, use {ph1} followed by the command."
+"Tinjau perubahan dan mulai ulang agen Anda. Koneksi REA-nya mengunci "
+"versi paket, jadi menjalankan ulang setup membuatnya memakai rilis baru. "
+"{ph0} mengikuti setiap terbitan; gunakan saat Anda sengaja ingin rilis "
+"terbaru. Untuk perintah CLI sekali pakai ber-pin versi, gunakan {ph1} "
+"diikuti perintahnya."
 
 #. {ph0}: <code>@6.8.0</code>
 #. {ph1}: <code>@latest</code>
@@ -15873,8 +15874,8 @@ msgid ""
 "Prefer a version pin such as {ph0}. Use {ph1} only when you intentionally "
 "want every new publish."
 msgstr ""
-"Prefer a version pin such as {ph0}. Use {ph1} only when you intentionally "
-"want every new publish."
+"Utamakan pin versi seperti {ph0}. Gunakan {ph1} hanya jika Anda sengaja "
+"ingin mengikuti setiap terbitan baru."
 
 #: website/public/get-started/index.html:1665
 msgctxt "page:get-started/index.html"
@@ -15883,9 +15884,9 @@ msgid ""
 " preparing Node.js. Download the tagged script, inspect it, then install "
 "that package version:"
 msgstr ""
-"On macOS or Linux, you can also review a version-pinned curl installer after"
-" preparing Node.js. Download the tagged script, inspect it, then install "
-"that package version:"
+"Di macOS atau Linux, setelah menyiapkan Node.js Anda juga dapat meninjau "
+"penginstal curl ber-pin versi. Unduh skrip bertanda, periksa, lalu "
+"instal versi paket tersebut:"
 
 #. {ph0}: <code>--version</code>
 #. {ph1}: <code>main/install.sh</code>
@@ -15900,10 +15901,10 @@ msgid ""
 " opt-in. Follow the setup prompts to connect your agent. If they don't "
 "appear, run {ph3}."
 msgstr ""
-"The tag pins the selected script revision; {ph0} selects the npm package. "
-"Piping {ph1} or using {ph2} follows every new tip publish; treat those as an"
-" opt-in. Follow the setup prompts to connect your agent. If they don't "
-"appear, run {ph3}."
+"Tag mengunci revisi skrip yang dipilih; {ph0} memilih paket npm. "
+"Menyambungkan {ph1} lewat pipe atau memakai {ph2} mengikuti setiap "
+"terbitan tip baru; anggap itu opsional. Ikuti petunjuk penyiapan untuk "
+"menghubungkan agen Anda. Jika tidak muncul, jalankan {ph3}."
 
 #. {ph0}: <code>@latest</code>
 #: website/public/get-started/index.html:1767
@@ -15914,9 +15915,9 @@ msgid ""
 "review its plan and restart your client. {ph0} follows every publish; use it"
 " when you intentionally want the newest release."
 msgstr ""
-"To refresh your agent connection, run setup again for the release you want, "
-"review its plan and restart your client. {ph0} follows every publish; use it"
-" when you intentionally want the newest release."
+"Untuk menyegarkan koneksi agen, jalankan lagi setup untuk rilis yang "
+"diinginkan, tinjau rencananya, lalu mulai ulang klien. {ph0} mengikuti "
+"setiap terbitan; gunakan saat Anda sengaja ingin rilis terbaru."
 
 #. {ph0}: <code>@6.8.0</code>
 #. {ph1}: <code>@latest</code>
@@ -15927,8 +15928,9 @@ msgid ""
 "Approve the setup plan, then restart your agent. Prefer a version pin such "
 "as {ph0}; use {ph1} only when you want every new publish."
 msgstr ""
-"Approve the setup plan, then restart your agent. Prefer a version pin such "
-"as {ph0}; use {ph1} only when you want every new publish."
+"Setujui rencana penyiapan, lalu mulai ulang agen Anda. Utamakan pin "
+"versi seperti {ph0}; gunakan {ph1} hanya jika ingin mengikuti setiap "
+"terbitan baru."
 
 # Reviewed for readable setup and analysis terminology.
 #, python-brace-format

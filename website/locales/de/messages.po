@@ -16100,10 +16100,12 @@ msgid ""
 "every publish; use it when you intentionally want the newest release. For a "
 "version-pinned one-off CLI command, use {ph1} followed by the command."
 msgstr ""
-"Review the changes and restart your agent. Its REA connection pins a package"
-" version, so refreshing setup makes it use the new release. {ph0} follows "
-"every publish; use it when you intentionally want the newest release. For a "
-"version-pinned one-off CLI command, use {ph1} followed by the command."
+"Prüfen Sie die Änderungen und starten Sie Ihren Agenten neu. Seine "
+"REA-Verbindung verwendet eine festgelegte Paketversion. Führen Sie die "
+"Einrichtung erneut aus, damit er die neue Version nutzt. {ph0} folgt "
+"jeder Veröffentlichung; verwenden Sie es nur, wenn Sie absichtlich die "
+"neueste Version wollen. Für einen versionsfestgelegten einzelnen "
+"CLI-Aufruf hängen Sie den Befehl an {ph1} an."
 
 #. {ph0}: <code>@6.8.0</code>
 #. {ph1}: <code>@latest</code>
@@ -16114,8 +16116,8 @@ msgid ""
 "Prefer a version pin such as {ph0}. Use {ph1} only when you intentionally "
 "want every new publish."
 msgstr ""
-"Prefer a version pin such as {ph0}. Use {ph1} only when you intentionally "
-"want every new publish."
+"Bevorzuge eine Versionsfestlegung wie {ph0}. Verwende {ph1} nur, wenn du "
+"absichtlich jeder neuen Veröffentlichung folgen willst."
 
 #: website/public/get-started/index.html:1665
 msgctxt "page:get-started/index.html"
@@ -16124,9 +16126,9 @@ msgid ""
 " preparing Node.js. Download the tagged script, inspect it, then install "
 "that package version:"
 msgstr ""
-"On macOS or Linux, you can also review a version-pinned curl installer after"
-" preparing Node.js. Download the tagged script, inspect it, then install "
-"that package version:"
+"Unter macOS oder Linux kannst du nach der Einrichtung von Node.js auch "
+"einen versionsfestgelegten curl-Installer prüfen. Lade das getaggte "
+"Skript herunter, prüfe es und installiere dann diese Paketversion:"
 
 #. {ph0}: <code>--version</code>
 #. {ph1}: <code>main/install.sh</code>
@@ -16141,10 +16143,11 @@ msgid ""
 " opt-in. Follow the setup prompts to connect your agent. If they don't "
 "appear, run {ph3}."
 msgstr ""
-"The tag pins the selected script revision; {ph0} selects the npm package. "
-"Piping {ph1} or using {ph2} follows every new tip publish; treat those as an"
-" opt-in. Follow the setup prompts to connect your agent. If they don't "
-"appear, run {ph3}."
+"Der Tag legt die gewählte Skriptrevision fest; {ph0} wählt das "
+"npm-Paket. Das Pipe von {ph1} oder die Verwendung von {ph2} folgt jeder "
+"neuen Tip-Veröffentlichung; behandle das als Opt-in. Folge den "
+"Einrichtungsanweisungen, um deinen Agenten zu verbinden. Wenn sie nicht "
+"erscheinen, führe {ph3} aus."
 
 #. {ph0}: <code>@latest</code>
 #: website/public/get-started/index.html:1767
@@ -16155,9 +16158,10 @@ msgid ""
 "review its plan and restart your client. {ph0} follows every publish; use it"
 " when you intentionally want the newest release."
 msgstr ""
-"To refresh your agent connection, run setup again for the release you want, "
-"review its plan and restart your client. {ph0} follows every publish; use it"
-" when you intentionally want the newest release."
+"Um die Verbindung deines Agenten zu aktualisieren, führe Setup erneut "
+"für die gewünschte Veröffentlichung aus, prüfe den Plan und starte "
+"deinen Client neu. {ph0} folgt jeder Veröffentlichung; verwende es nur, "
+"wenn du absichtlich die neueste Version willst."
 
 #. {ph0}: <code>@6.8.0</code>
 #. {ph1}: <code>@latest</code>
@@ -16168,8 +16172,9 @@ msgid ""
 "Approve the setup plan, then restart your agent. Prefer a version pin such "
 "as {ph0}; use {ph1} only when you want every new publish."
 msgstr ""
-"Approve the setup plan, then restart your agent. Prefer a version pin such "
-"as {ph0}; use {ph1} only when you want every new publish."
+"Prüfe und bestätige die geplanten Änderungen. Starte danach deinen Agent "
+"neu. Bevorzuge eine Versionsfestlegung wie {ph0}; verwende {ph1} nur, "
+"wenn du jeder neuen Veröffentlichung folgen willst."
 
 # Reviewed for readable setup and analysis terminology.
 #, python-brace-format
