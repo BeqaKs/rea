@@ -130,9 +130,12 @@ explicit path or endpoint and do not need it.
   own contract says so.
 - User-owned browser page already open: `list_browser_targets`.
 - Passive traffic capture of a SPA: the default scope is the page's own origin,
-  and data APIs usually live on another origin. Find the API origins first
-  (absolute URLs in loaded bundles, or a short unscoped probe), pass them in
-  `allowed_origins`, and read `completeness.excluded` before reporting that an
+  and data APIs usually live on another origin. Discover API origins from
+  absolute URLs in loaded bundles or script text via JavaScript analysis tools
+  (another passive capture without those origins still scopes to the page
+  origin, and `completeness.excluded` counts lack URLs). Pass both the page
+  origin and those API origins in `allowed_origins` — the list replaces the
+  default scope — and read `completeness.excluded` before reporting that an
   API is absent. For long captures with body shapes, use
   `export_evidence_bundle` instead of expecting an inline result.
 - Browser action the agent must perform (click, type, navigate):
