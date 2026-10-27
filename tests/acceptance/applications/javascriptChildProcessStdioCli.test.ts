@@ -190,12 +190,7 @@ const cases = [
   ['exec("named-callback", done)', "named-callback", "pipe", null],
   ['execFile("callback-alias", [], callback)', "callback-alias", "pipe", 0],
   ['exec("imported-callback", imported)', "imported-callback", "pipe", null],
-  [
-    'exec("reassigned-callback", changed)',
-    "reassigned-callback",
-    "pipe",
-    null,
-  ],
+  ['exec("reassigned-callback", changed)', "reassigned-callback", "pipe", null],
   ['spawn("named-nullish", [], {stdio:absent})', "named-nullish", "dynamic", 0],
   [
     'spawn("named-null-spread", [], {stdio:"inherit",...absent})',
