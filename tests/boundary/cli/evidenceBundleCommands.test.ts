@@ -127,6 +127,59 @@ cliTest.for([
   expect(await readdir(root)).toEqual(["parent.json"]);
 });
 
+cliTest.for([
+  {
+    label: "import-input",
+    arguments: ["evidence-import", ""],
+    field: "path",
+  },
+  {
+    label: "export-source",
+    arguments: ["evidence-export", "", "refused.json"],
+    field: "source",
+  },
+  {
+    label: "export-output",
+    arguments: ["evidence-export", "bundle.json", ""],
+    field: "output",
+  },
+  {
+    label: "compare-left",
+    arguments: ["compare", "", "bundle.json"],
+    field: "left",
+  },
+  {
+    label: "compare-right",
+    arguments: ["compare", "bundle.json", ""],
+    field: "right",
+  },
+] as const)(
+  "rejects an empty $label path before resolving it to the working directory",
+  async ({ arguments: arguments_, field }, { cli }) => {
+    const root = await createTestTempDirectory("rea-evidence-empty-path-");
+    const result = await cli.run({
+      arguments: [...arguments_, "--json"],
+      cwd: root,
+      environment: { REA_LOG_LEVEL: "silent" },
+    });
+    expect(result.exitCode).toBe(1);
+    expect(result.json).toMatchObject({
+      code: "VALIDATION_ERROR",
+      fieldErrors: expect.arrayContaining([
+        expect.objectContaining({
+          path: field,
+          code: "too_small",
+          missing: false,
+        }),
+      ]),
+    });
+    expect(result.json).not.toMatchObject({
+      details: { reason: "not-file" },
+    });
+    expect(await readdir(root)).toEqual([]);
+  },
+);
+
 cliTest(
   "reports standalone import counts for every unknown revision",
   async ({ cli }) => {
