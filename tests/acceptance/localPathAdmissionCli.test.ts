@@ -43,14 +43,25 @@ cliTest(
         arguments: ["inspect-web-network-capture", "", "har"],
         field: "capturePath",
       },
+      { arguments: ["evidence-import", ""], field: "path" },
+      {
+        arguments: ["evidence-export", "", "refused.json"],
+        field: "source",
+      },
+      {
+        arguments: ["evidence-export", "unread.json", ""],
+        field: "output",
+      },
+      { arguments: ["compare", "", "unread.json"], field: "left" },
+      { arguments: ["compare", "unread.json", ""], field: "right" },
     ];
     for (const selection of selections) {
       const result = await runFileCli(cli, {
         arguments: [...selection.arguments, "--json"],
         cwd,
       });
-      expect(result.exitCode, selection.arguments[0]).toBe(1);
-      expect(result.json, selection.arguments[0]).toMatchObject({
+      expect(result.exitCode, selection.arguments.join(" ")).toBe(1);
+      expect(result.json, selection.arguments.join(" ")).toMatchObject({
         code: "VALIDATION_ERROR",
         fieldErrors: expect.arrayContaining([
           expect.objectContaining({
@@ -60,6 +71,9 @@ cliTest(
           }),
         ]),
       });
+      expect(result.stdout, selection.arguments.join(" ")).not.toContain(
+        "does not point to a regular file",
+      );
     }
   },
 );
