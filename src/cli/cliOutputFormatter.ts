@@ -58,13 +58,16 @@ const escapeInlineSyntax = (
     ? match
     : match.replace(/./g, "\\$&");
 
-const escapeTableCell = (value: string): string =>
+/** Escape one Markdown table cell so pipes and inline syntax stay literal. */
+export const escapeCliMarkdownTableCell = (value: string): string =>
   value
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/[\\|`*[\]~]|_+/g, escapeInlineSyntax)
     .replace(/\r\n|\r|\n/g, "<br>");
+
+const escapeTableCell = escapeCliMarkdownTableCell;
 
 /** Heading and paragraph facts are literal data, including block syntax. */
 const escapeMarkdownText = (value: string): string =>

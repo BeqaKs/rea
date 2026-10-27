@@ -1,6 +1,45 @@
-import { expect, it } from "vitest";
+import { parseFragment, type DefaultTreeAdapterTypes } from "parse5";
+import { createMarkdownRenderer, disposeMdItInstance } from "vitepress";
+import { afterAll, expect, it } from "vitest";
 
 import { createCli } from "../../../src/cli.js";
+import { createTestTempDirectory } from "../../fixtures/temporaryDirectory.js";
+
+afterAll(() => disposeMdItInstance());
+
+const serveCli = async (
+  argv: readonly string[],
+): Promise<{ readonly text: string; readonly exit: number }> => {
+  const cli = createCli({});
+  let text = "";
+  let exit = 0;
+  await cli.serve([...argv], {
+    stdout: (chunk) => {
+      text += chunk;
+    },
+    exit: (code) => {
+      exit = code;
+    },
+    env: {},
+  });
+  return { text, exit };
+};
+
+const renderedMessageCells = (html: string): string[] => {
+  const text = (node: DefaultTreeAdapterTypes.Node): string =>
+    node.nodeName === "#text" && "value" in node
+      ? node.value
+      : "childNodes" in node
+        ? node.childNodes.map(text).join("")
+        : "";
+  const cells: string[] = [];
+  const visit = (node: DefaultTreeAdapterTypes.Node): void => {
+    if ("tagName" in node && node.tagName === "td") cells.push(text(node));
+    else if ("childNodes" in node) node.childNodes.forEach(visit);
+  };
+  visit(parseFragment(html));
+  return cells;
+};
 
 it.each([
   ["analyze"],
@@ -10,18 +49,7 @@ it.each([
 ])(
   "keeps correction fields and concise guidance for invalid CLI arguments: %j",
   async (...argv) => {
-    const cli = createCli({});
-    let text = "";
-    let exit = 0;
-    await cli.serve([...argv, "--json"], {
-      stdout: (chunk) => {
-        text += chunk;
-      },
-      exit: (code) => {
-        exit = code;
-      },
-      env: {},
-    });
+    const { text, exit } = await serveCli([...argv, "--json"]);
     expect(exit).toBe(1);
     const result = JSON.parse(text);
     expect(result).toMatchObject({
@@ -64,3 +92,27 @@ it.each([
       );
   },
 );
+
+it("keeps every allowed search --kind value in Markdown validation tables", async () => {
+  const { text, exit } = await serveCli([
+    "search",
+    "./missing-input",
+    "needle",
+    "--kind",
+    "unrecognized",
+    "--format",
+    "md",
+  ]);
+  expect(exit).toBe(1);
+  expect(text).toContain("VALIDATION_ERROR");
+  expect(text).toContain('"strings"\\|"procedures"');
+  expect(text).not.toMatch(/"strings"\|"procedures"/);
+
+  const root = await createTestTempDirectory("rea-argument-md-enum-");
+  const renderer = await createMarkdownRenderer(root, { linkify: false });
+  const message = renderedMessageCells(renderer.render(text)).find((cell) =>
+    cell.includes("strings"),
+  );
+  expect(message).toContain("strings");
+  expect(message).toContain("procedures");
+});
