@@ -7,7 +7,6 @@ import {
   readMappedCString,
 } from "../metadata/BinaryContainer.js";
 import { architectureForElfMachine } from "../metadata/ElfImage.js";
-import { isUtf8 } from "node:buffer";
 import { readElfStringBytes } from "../metadata/ElfStringTable.js";
 import { readElfSymbol } from "../../domain/elfSymbol.js";
 import {
@@ -17,6 +16,7 @@ import {
 import { readPeImage } from "../metadata/PeImage.js";
 import {
   MAX_NATIVE_EXPORT_ROWS,
+  decodeElfExportName,
   type ElfExport,
   type NativeExportIssue,
   type NativeExports,
@@ -36,20 +36,37 @@ const MAXIMUM_NAME_BYTES = 4096;
 /** Text retained across all rows; names can repeat one long string table entry. */
 const MAXIMUM_RETAINED_TEXT_BYTES = 16 * 1024 * 1024;
 
-/** Charge every retained row and its text before it is stored. */
+const retainedTextBytes = (...strings: readonly (string | null)[]): number =>
+  strings.reduce(
+    (bytes, value) =>
+      bytes + (value === null ? 0 : Buffer.byteLength(value, "utf8")),
+    0,
+  );
+
+const checkRetainedText = (bytes: number): void => {
+  if (bytes > MAXIMUM_RETAINED_TEXT_BYTES)
+    throw new BinaryResourceFailure(
+      "structure",
+      MAXIMUM_RETAINED_TEXT_BYTES,
+      `Export names exceed the ${String(MAXIMUM_RETAINED_TEXT_BYTES)}-byte retained-text allowance`,
+    );
+};
+
+/** Charge retained text and rows at their owning storage boundary. */
 const createRetention = () => {
   let rows = 0;
   let text = 0;
-  return (...strings: readonly (string | null)[]): void => {
-    rows++;
-    rowBudget(rows, "Export inventory");
-    for (const value of strings) text += value?.length ?? 0;
-    if (text > MAXIMUM_RETAINED_TEXT_BYTES)
-      throw new BinaryResourceFailure(
-        "structure",
-        MAXIMUM_RETAINED_TEXT_BYTES,
-        `Export names exceed the ${String(MAXIMUM_RETAINED_TEXT_BYTES)}-byte retained-text allowance`,
-      );
+  const retainText = (...strings: readonly (string | null)[]): void => {
+    text += retainedTextBytes(...strings);
+    checkRetainedText(text);
+  };
+  return {
+    text: retainText,
+    row: (...strings: readonly (string | null)[]): void => {
+      rows++;
+      rowBudget(rows, "Export inventory");
+      retainText(...strings);
+    },
   };
 };
 
@@ -115,19 +132,22 @@ const parsePeExports = (bytes: Buffer, artifact: Artifact): NativeExports => {
   const mappings = imageFileMappings(image);
   const map = (rva: number, size: number): number =>
     mappedFileOffset(mappings, base + BigInt(rva), size, image.zero_fills);
-  const cString = (rva: number): string => {
+  const cStringBytes = (
+    rva: number,
+    maximumBytes = MAXIMUM_NAME_BYTES,
+  ): Buffer => {
     const value = readMappedCString(
       bytes,
       image,
       base + BigInt(rva),
-      MAXIMUM_NAME_BYTES,
+      maximumBytes,
     );
     if (value.length === 0)
       throw new BinaryFormatFailure(
         "malformed",
         `Export name at RVA ${hex(rva)} is empty`,
       );
-    return value.toString("latin1");
+    return value;
   };
 
   const header = map(directory.address, PE_EXPORT_DIRECTORY_BYTES);
@@ -145,7 +165,7 @@ const parsePeExports = (bytes: Buffer, artifact: Artifact): NativeExports => {
   const issues: NativeExportIssue[] = [];
   let dllName: string | null = null;
   try {
-    dllName = cString(reader.u32(header + 12));
+    dllName = cStringBytes(reader.u32(header + 12)).toString("latin1");
   } catch (cause) {
     issues.push({
       code: "name_unreadable",
@@ -154,6 +174,7 @@ const parsePeExports = (bytes: Buffer, artifact: Artifact): NativeExports => {
     });
   }
 
+  const retain = createRetention();
   const namesByFunction = new Map<number, string[]>();
   const namedFunctions = new Set<number>();
   for (let index = 0; index < nameCount; index++) {
@@ -169,8 +190,13 @@ const parsePeExports = (bytes: Buffer, artifact: Artifact): NativeExports => {
     }
     namedFunctions.add(functionIndex);
     try {
+      const nameBytes = cStringBytes(nameRva);
+      // Validate unused slots too, but retain names only for populated slots.
+      if (reader.u32(functions + functionIndex * 4) === 0) continue;
+      const name = nameBytes.toString("latin1");
+      retain.text(name);
       const list = namesByFunction.get(functionIndex) ?? [];
-      list.push(cString(nameRva));
+      list.push(name);
       namesByFunction.set(functionIndex, list);
     } catch (cause) {
       issues.push({
@@ -182,7 +208,6 @@ const parsePeExports = (bytes: Buffer, artifact: Artifact): NativeExports => {
   }
 
   const forwarderEnd = directory.address + directory.size;
-  const retain = createRetention();
   const exports: PeExport[] = [];
   for (let index = 0; index < functionCount; index++) {
     const rva = reader.u32(functions + index * 4);
@@ -192,7 +217,15 @@ const parsePeExports = (bytes: Buffer, artifact: Artifact): NativeExports => {
     let target: Pick<PeExport, "address" | "forwarder">;
     if (rva >= directory.address && rva < forwarderEnd) {
       try {
-        target = { address: null, forwarder: cString(rva) };
+        target = {
+          address: null,
+          // PE forwarder strings, including their NUL, must fit within the
+          // export data directory. Ordinary export names have no such bound.
+          forwarder: cStringBytes(
+            rva,
+            Math.min(MAXIMUM_NAME_BYTES, forwarderEnd - rva - 1),
+          ).toString("latin1"),
+        };
       } catch (cause) {
         issues.push({
           code: "malformed_entry",
@@ -205,12 +238,12 @@ const parsePeExports = (bytes: Buffer, artifact: Artifact): NativeExports => {
     const exportNames = namesByFunction.get(index);
     if (exportNames !== undefined)
       for (const name of exportNames) {
-        retain(name, target.forwarder);
+        retain.row(target.forwarder);
         exports.push({ name, ordinal, ...target });
       }
     // A slot whose only name was unreadable is reported through its issue.
     else if (!namedFunctions.has(index)) {
-      retain(target.forwarder);
+      retain.row(target.forwarder);
       exports.push({ name: null, ordinal, ...target });
     }
   }
@@ -279,22 +312,7 @@ const versionSectionData = (
 };
 
 /** Version names by index, read from `.gnu.version_d` and `.gnu.version_r`. */
-type DecodedElfString = {
-  readonly name: string;
-  readonly name_bytes_base64: string | null;
-  readonly name_utf8_decodable: boolean;
-};
-
-const decodeElfString = (bytes: Buffer): DecodedElfString => {
-  const utf8 = isUtf8(bytes);
-  return {
-    name: bytes.toString(utf8 ? "utf8" : "latin1"),
-    name_bytes_base64: bytes.some((byte) => byte >= 0x80)
-      ? bytes.toString("base64")
-      : null,
-    name_utf8_decodable: utf8,
-  };
-};
+type DecodedElfString = ReturnType<typeof decodeElfExportName>;
 
 const readVersionNames = (
   reader: BinaryReader,
@@ -302,8 +320,25 @@ const readVersionNames = (
   issues: NativeExportIssue[],
 ): Map<number, DecodedElfString | null> => {
   const namesByIndex = new Map<number, DecodedElfString | null>();
+  // This intermediate map owns its storage independently of repeated text in
+  // output rows. Replacing an index releases its previous decoded name.
+  let textBytes = 0;
   const addName = (index: number, name: Buffer): void => {
-    namesByIndex.set(index, name.length === 0 ? null : decodeElfString(name));
+    const decoded = name.length === 0 ? null : decodeElfExportName(name);
+    const previous = namesByIndex.get(index);
+    const nextTextBytes =
+      textBytes -
+      retainedTextBytes(
+        previous?.name ?? null,
+        previous?.name_bytes_base64 ?? null,
+      ) +
+      retainedTextBytes(
+        decoded?.name ?? null,
+        decoded?.name_bytes_base64 ?? null,
+      );
+    checkRetainedText(nextTextBytes);
+    namesByIndex.set(index, decoded);
+    textBytes = nextTextBytes;
   };
   const verneed = sections.find(({ type }) => type === SHT_GNU_VERNEED);
   if (verneed !== undefined) {
@@ -599,7 +634,7 @@ const parseElfExports = (bytes: Buffer, artifact: Artifact): NativeExports => {
     let rawNameBase64: string | null;
     try {
       const rawName = readElfStringBytes(names, symbol.name_offset);
-      const decodedName = decodeElfString(rawName);
+      const decodedName = decodeElfExportName(rawName);
       nameUtf8Decodable = decodedName.name_utf8_decodable;
       name = decodedName.name;
       rawNameBase64 = decodedName.name_bytes_base64;
@@ -619,7 +654,7 @@ const parseElfExports = (bytes: Buffer, artifact: Artifact): NativeExports => {
       });
       continue;
     }
-    retain(
+    retain.row(
       name,
       typeof version === "object" ? (version?.name ?? null) : null,
       rawNameBase64,
