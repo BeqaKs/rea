@@ -1043,6 +1043,24 @@ describe("evidence bundle filesystem adapter", () => {
   });
 });
 
+describe("evidence bundle output destinations", () => {
+  it.each([false, true])(
+    "refuses an existing directory as not-file with overwrite=%s",
+    async (overwrite) => {
+      const directory = await createTestTempDirectory("rea-evidence-");
+      const output = join(directory, "output");
+      await mkdir(output);
+      await writeFile(join(output, "keep.txt"), "keep\n");
+      expect(await writeBundle(bundle(), output, overwrite)).toMatchObject({
+        ok: false,
+        error: { _tag: "EvidenceFileError", reason: "not-file" },
+      });
+      expect(await readdir(output)).toEqual(["keep.txt"]);
+      expect(await readFile(join(output, "keep.txt"), "utf8")).toBe("keep\n");
+    },
+  );
+});
+
 describe("standalone Evidence bundle inputs", () => {
   it("classifies a record only after authenticating it", async () => {
     const directory = await createTestTempDirectory("rea-evidence-");
